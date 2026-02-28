@@ -1,0 +1,460 @@
+@import "tailwindcss";
+
+/* ========================================
+   WINDOWS VISTA AERO THEME
+   ======================================== */
+
+:root {
+  --vista-bg: #1a5a3a;
+  --vista-glass: rgba(180, 210, 240, 0.45);
+  --vista-glass-dark: rgba(40, 80, 140, 0.65);
+  --vista-titlebar-start: #3a7abf;
+  --vista-titlebar-end: #1a4a8f;
+  --vista-titlebar-inactive: #7a9abb;
+  --vista-window-bg: #f0f0f0;
+  --vista-window-border: rgba(100, 150, 220, 0.6);
+  --vista-text: #1a1a1a;
+  --vista-text-muted: #555;
+  --vista-blue: #0066cc;
+  --vista-blue-hover: #0078ee;
+  --vista-highlight: #3399ff;
+  --vista-shadow: rgba(0, 0, 0, 0.35);
+  --vista-btn-close: #c42b1c;
+  --vista-btn-close-hover: #e81123;
+  --vista-btn-minmax: rgba(255, 255, 255, 0.15);
+  --vista-taskbar: rgba(20, 50, 100, 0.75);
+  --vista-start-gradient: linear-gradient(180deg, #3a8ecd 0%, #1a5a9e 50%, #1a4a8e 100%);
+}
+
+@theme inline {
+  --font-sans: "Segoe UI", var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Consolas", monospace;
+}
+
+body {
+  font-family: "Segoe UI", var(--font-geist-sans), system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   VISTA DESKTOP — Aurora Wallpaper
+   ======================================== */
+.vista-desktop {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(76, 175, 80, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(33, 150, 243, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(56, 142, 60, 0.5) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 0%, rgba(13, 71, 161, 0.6) 0%, transparent 50%),
+    linear-gradient(180deg, #0d1b2a 0%, #1b3a2a 30%, #2d5a3a 60%, #0a2a1a 100%);
+  min-height: 100vh;
+}
+
+/* ========================================
+   AERO GLASS WINDOW
+   ======================================== */
+.vista-window {
+  background: var(--vista-window-bg);
+  border: 1px solid var(--vista-window-border);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 4px 20px var(--vista-shadow),
+    0 0 40px rgba(100, 160, 255, 0.08);
+  border-radius: 6px;
+}
+
+.vista-titlebar {
+  background: linear-gradient(180deg, var(--vista-titlebar-start) 0%, var(--vista-titlebar-end) 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px 6px 0 0;
+  position: relative;
+}
+
+/* Aero glass shine on title bar */
+.vista-titlebar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-radius: 6px 6px 0 0;
+  pointer-events: none;
+}
+
+.vista-window-body {
+  background: var(--vista-window-bg);
+  border-radius: 0 0 6px 6px;
+}
+
+/* Title bar buttons */
+.vista-btn-minimize,
+.vista-btn-maximize {
+  background: var(--vista-btn-minmax);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.1s;
+}
+
+.vista-btn-minimize:hover,
+.vista-btn-maximize:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.vista-btn-close {
+  background: linear-gradient(180deg, #c75050 0%, #a02020 100%);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.1s;
+}
+
+.vista-btn-close:hover {
+  background: linear-gradient(180deg, #e05050 0%, #c02020 100%);
+}
+
+/* ========================================
+   TASKBAR
+   ======================================== */
+.vista-taskbar {
+  background: linear-gradient(180deg, rgba(60, 110, 180, 0.85) 0%, rgba(20, 50, 110, 0.9) 50%, rgba(10, 30, 80, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(150, 200, 255, 0.3);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Taskbar shine */
+.vista-taskbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.vista-taskbar-item-active {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Start button orb */
+.vista-orb {
+  background: radial-gradient(circle at 40% 35%, #5ebe5e, #2d8e2d 60%, #1a6a1a);
+  box-shadow:
+    0 0 6px rgba(50, 180, 50, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 60, 0, 0.5);
+}
+
+.vista-start-btn:hover .vista-orb {
+  background: radial-gradient(circle at 40% 35%, #6ece6e, #3a9e3a 60%, #2a7a2a);
+  box-shadow:
+    0 0 10px rgba(50, 180, 50, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+/* Start Menu */
+.vista-start-menu {
+  background: rgba(30, 60, 110, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(100, 160, 255, 0.3);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+.vista-start-header {
+  background: linear-gradient(180deg, rgba(60, 120, 200, 0.8) 0%, rgba(30, 70, 140, 0.8) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vista-start-footer {
+  background: linear-gradient(180deg, rgba(30, 60, 110, 0.9) 0%, rgba(15, 35, 70, 0.9) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.vista-systray {
+  background: rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   VISTA FORM ELEMENTS
+   ======================================== */
+.vista-input {
+  background: white;
+  border: 1px solid #abadb3;
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-size: 13px;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.15s;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+}
+
+.vista-input:focus {
+  border-color: #3399ff;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07), 0 0 3px rgba(51, 153, 255, 0.4);
+}
+
+.vista-btn {
+  background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 45%, #cfcfcf 50%, #e0e0e0 100%);
+  border: 1px solid #8e8f8f;
+  border-radius: 3px;
+  padding: 3px 16px;
+  font-size: 13px;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: all 0.1s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.vista-btn:hover {
+  background: linear-gradient(180deg, #e8f0fe 0%, #c8d8f0 45%, #b8c8e8 50%, #d0e0f4 100%);
+  border-color: #5b9bd5;
+}
+
+.vista-btn:active {
+  background: linear-gradient(180deg, #c0d0e4 0%, #a8b8d4 45%, #98a8c4 50%, #b0c0d8 100%);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.vista-btn-primary {
+  background: linear-gradient(180deg, #6db3f2 0%, #2a8ad4 45%, #1a7ac4 50%, #3a9ae4 100%);
+  border: 1px solid #1a5a9e;
+  color: white;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+.vista-btn-primary:hover {
+  background: linear-gradient(180deg, #7dc3ff 0%, #3a9ae4 45%, #2a8ad4 50%, #4aaaee 100%);
+  border-color: #0d47a1;
+}
+
+.vista-btn-primary:active {
+  background: linear-gradient(180deg, #4a8ad4 0%, #1a6ab4 45%, #0a5aa4 50%, #2a7ac4 100%);
+}
+
+/* ========================================
+   VISTA PANELS & CARDS
+   ======================================== */
+.vista-panel {
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.vista-panel-header {
+  background: linear-gradient(180deg, #ecf4fc 0%, #d9e8f7 100%);
+  border-bottom: 1px solid #bcd4ea;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a3a5a;
+  border-radius: 4px 4px 0 0;
+}
+
+.vista-groupbox {
+  border: 1px solid #d5dfe5;
+  border-radius: 4px;
+  padding: 12px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.vista-groupbox-label {
+  position: absolute;
+  top: -9px;
+  left: 12px;
+  background: var(--vista-window-bg);
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a4a7a;
+}
+
+/* Vista-style link */
+.vista-link {
+  color: #0066cc;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.vista-link:hover {
+  color: #0078ee;
+  text-decoration: underline;
+}
+
+/* Vista info bar */
+.vista-infobar {
+  background: linear-gradient(180deg, #fefefe 0%, #ecf4fc 100%);
+  border: 1px solid #bcd4ea;
+  border-radius: 4px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Stage badges - Vista style */
+.vista-badge-emerging {
+  background: linear-gradient(180deg, #d4edda 0%, #b8e0c0 100%);
+  border: 1px solid #8bc49a;
+  color: #1a5a2a;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.vista-badge-peaking {
+  background: linear-gradient(180deg, #fff3cd 0%, #ffe8a0 100%);
+  border: 1px solid #d4a840;
+  color: #6a4a00;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ========================================
+   SCROLLBARS — Vista style
+   ======================================== */
+::-webkit-scrollbar {
+  width: 17px;
+  height: 17px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(90deg, #f0f0f0 0%, #e8e8e8 100%);
+  border-left: 1px solid #c0c0c0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #c8c8c8 0%, #b0b0b0 50%, #c0c0c0 100%);
+  border: 1px solid #a0a0a0;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #a8c8e8 0%, #80a8d0 50%, #98b8e0 100%);
+}
+
+::-webkit-scrollbar-button {
+  display: block;
+  height: 17px;
+  width: 17px;
+  background: linear-gradient(180deg, #f4f4f4 0%, #e0e0e0 100%);
+  border: 1px solid #a0a0a0;
+}
+
+/* Vista progress bar */
+.vista-progress {
+  background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%);
+  border: 1px solid #a0a0a0;
+  border-radius: 3px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.vista-progress-bar {
+  background: linear-gradient(180deg, #5cbb5c 0%, #3a9a3a 40%, #2a8a2a 60%, #4aaa4a 100%);
+  height: 100%;
+  border-radius: 2px;
+  position: relative;
+}
+
+/* Animated shine on progress bar */
+.vista-progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* Horizontal scroll container */
+.scroll-container {
+  scrollbar-width: auto;
+}
+
+/* ========================================
+   DESKTOP ICONS
+   ======================================== */
+.vista-desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 76px;
+  text-align: center;
+  transition: background 0.15s;
+}
+
+.vista-desktop-icon:hover {
+  background: rgba(100, 160, 255, 0.2);
+  outline: 1px solid rgba(100, 160, 255, 0.4);
+}
+
+.vista-desktop-icon:active,
+.vista-desktop-icon.selected {
+  background: rgba(100, 160, 255, 0.35);
+  outline: 1px solid rgba(100, 160, 255, 0.6);
+}
+
+.vista-desktop-icon-img {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.vista-desktop-icon-label {
+  font-size: 11px;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  max-width: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========================================
+   VISTA CHECKBOX / TOGGLE
+   ======================================== */
+.vista-checkbox {
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border: 1px solid #8e8f8f;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #fff 0%, #f0f0f0 100%);
+  cursor: pointer;
+  position: relative;
+}
+
+.vista-checkbox:checked::after {
+  content: "\2713";
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  font-size: 12px;
+  color: #1a6a1a;
+  font-weight: bold;
+}
