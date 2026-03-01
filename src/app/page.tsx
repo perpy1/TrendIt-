@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { CyberPanel } from "@/components/cyber-panel";
 import { CyberModal } from "@/components/cyber-modal";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, Mail, ArrowRight } from "lucide-react";
 import { PlatformIcon } from "@/components/platform-icon";
 import { useState } from "react";
 
@@ -20,6 +20,31 @@ export default function LandingPage() {
   const { user } = useAuth();
   const router = useRouter();
   const [showSample, setShowSample] = useState(false);
+  const [email, setEmail] = useState("");
+  const [subscribeState, setSubscribeState] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setSubscribeState("loading");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) {
+        setSubscribeState("success");
+        setEmail("");
+      } else {
+        setSubscribeState("error");
+      }
+    } catch {
+      setSubscribeState("error");
+    }
+  };
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center">
@@ -40,6 +65,62 @@ export default function LandingPage() {
         </p>
       </div>
 
+      {/* Email Signup */}
+      <div className="mx-auto mb-8 w-full max-w-lg">
+        <CyberPanel>
+          <div className="flex items-center gap-2 mb-4">
+            <Mail className="h-4 w-4 text-[var(--color-accent)]" />
+            <span className="pixel-heading text-[10px] text-[var(--color-accent)]">
+              Get daily reports in your inbox
+            </span>
+          </div>
+
+          {subscribeState === "success" ? (
+            <div className="cyber-card border-[var(--color-accent)] bg-[var(--color-accent-dim)] p-3 text-center">
+              <p className="text-sm font-semibold text-[var(--color-accent)]">You&apos;re in!</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+                We&apos;ll send you daily trend reports straight to your inbox.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubscribe} className="flex gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="cyber-input flex-1"
+                required
+              />
+              <button
+                type="submit"
+                disabled={subscribeState === "loading"}
+                className="cyber-btn-primary flex shrink-0 items-center gap-1 whitespace-nowrap"
+              >
+                {subscribeState === "loading" ? (
+                  "Subscribing..."
+                ) : (
+                  <>
+                    Subscribe <ArrowRight className="h-3 w-3" />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
+
+          {subscribeState === "error" && (
+            <p className="mt-2 text-xs text-[var(--color-danger)]">
+              Something went wrong. Please try again.
+            </p>
+          )}
+
+          <p className="mt-3 text-[10px] text-[var(--color-text-dim)]">
+            Free daily reports. No spam. Unsubscribe anytime.
+          </p>
+        </CyberPanel>
+      </div>
+
+      {/* How it works */}
       <CyberPanel className="mx-auto w-full max-w-lg">
         <div className="cyber-panel-header">How it works</div>
         <div className="mt-4 space-y-3 text-sm">

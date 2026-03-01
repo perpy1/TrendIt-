@@ -104,6 +104,14 @@ CREATE TABLE breakout_singles (
   display_order INTEGER DEFAULT 0
 );
 
+-- Email subscribers (landing page signups)
+CREATE TABLE email_subscribers (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  email TEXT UNIQUE NOT NULL,
+  subscribed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  is_active BOOLEAN NOT NULL DEFAULT true
+);
+
 -- Telegram alerts log
 CREATE TABLE tg_alerts_log (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
