@@ -1,18 +1,28 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import { AuthGuard } from "@/components/auth-guard";
 import { TrendCard } from "@/components/trend-card";
 import { BreakoutSingleCard } from "@/components/breakout-single-card";
 import { CyberPanel } from "@/components/cyber-panel";
-import { getReportByDate } from "@/lib/mock-data";
 import { formatDate, formatNumber } from "@/lib/utils";
-import { BarChart3, TrendingUp, Layers, Bell, ArrowLeft, ArrowRight, AlertCircle, FileText } from "lucide-react";
+import { BarChart3, TrendingUp, Layers, Bell, ArrowLeft, ArrowRight, AlertCircle, FileText, Loader2 } from "lucide-react";
 import Link from "next/link";
+import type { DailyReport } from "@/lib/types";
 
 export default function ReportPage({ params }: { params: Promise<{ date: string }> }) {
   const { date } = use(params);
-  const report = getReportByDate(date);
+  const [report, setReport] = useState<DailyReport | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/report?date=${date}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setReport(data))
+      .catch(() => setReport(null))
+      .finally(() => setLoading(false));
+  }, [date]);
 
   const prevDate = new Date(new Date(date + "T12:00:00").getTime() - 86400000).toISOString().split("T")[0];
   const nextDate = new Date(new Date(date + "T12:00:00").getTime() + 86400000).toISOString().split("T")[0];
@@ -23,7 +33,12 @@ export default function ReportPage({ params }: { params: Promise<{ date: string 
   return (
     <AuthGuard>
       <div className="mx-auto max-w-3xl">
-        {!report || isFuture ? (
+        {loading ? (
+          <div className="flex flex-col items-center py-16 text-center">
+            <Loader2 className="mb-4 h-8 w-8 animate-spin text-[var(--color-accent)]" />
+            <p className="text-xs text-[var(--color-text-muted)]">Loading report...</p>
+          </div>
+        ) : !report || isFuture ? (
           /* Empty state */
           <div className="flex flex-col items-center py-16 text-center">
             <AlertCircle className="mb-4 h-10 w-10 text-[var(--color-warning)]" />
@@ -80,7 +95,7 @@ export default function ReportPage({ params }: { params: Promise<{ date: string 
                 <div className="h-4 w-px bg-[var(--color-card-border)]" />
                 <div className="flex items-center gap-1.5 text-xs">
                   <BarChart3 className="h-3.5 w-3.5 text-[var(--color-warning)]" />
-                  <span className="text-[var(--color-text-muted)]">3 platforms</span>
+                  <span className="text-[var(--color-text-muted)]">YouTube</span>
                 </div>
               </div>
             </div>
@@ -115,7 +130,7 @@ export default function ReportPage({ params }: { params: Promise<{ date: string 
             <CyberPanel className="text-center">
               <p className="text-sm font-semibold">That&apos;s today&apos;s report</p>
               <p className="mt-1 text-xs text-[var(--color-text-muted)]">
-                {formatNumber(report.total_breakout_videos_count)} breakout videos analyzed across 3 platforms.
+                {formatNumber(report.total_breakout_videos_count)} breakout videos analyzed across YouTube.
               </p>
               <div className="mt-3 flex justify-center gap-3">
                 <Link href="/settings" className="cyber-btn flex items-center gap-1 text-xs">
