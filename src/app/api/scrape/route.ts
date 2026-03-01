@@ -1,52 +1,34 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 
 // Scraping pipeline endpoint
-// In production, this would be called by a cron job every 2-4 hours
-// It would scrape content from 50+ creators across TikTok, Instagram, and YouTube
+// Called by a cron job every 2-4 hours
+// Authenticated via CRON_SECRET bearer token
 
-interface ScrapeResult {
-  platform: string;
-  creators_scraped: number;
-  content_found: number;
-  breakouts_detected: number;
-}
+export async function POST(request: NextRequest) {
+  // Verify auth
+  const authHeader = request.headers.get("authorization");
+  const cronSecret = process.env.CRON_SECRET;
 
-export async function POST() {
-  // Mock scraping result — in production this would:
-  // 1. Fetch content from YouTube Data API v3
-  // 2. Scrape TikTok via unofficial APIs
-  // 3. Scrape Instagram via unofficial APIs
-  // 4. Calculate velocity and breakout scores
-  // 5. Store results in database
+  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  const results: ScrapeResult[] = [
-    {
-      platform: "youtube",
-      creators_scraped: 20,
-      content_found: 45,
-      breakouts_detected: 5,
-    },
-    {
-      platform: "tiktok",
-      creators_scraped: 18,
-      content_found: 62,
-      breakouts_detected: 7,
-    },
-    {
-      platform: "instagram",
-      creators_scraped: 15,
-      content_found: 38,
-      breakouts_detected: 3,
-    },
-  ];
-
-  return NextResponse.json({
-    success: true,
-    timestamp: new Date().toISOString(),
-    results,
-    total_breakouts: results.reduce((sum, r) => sum + r.breakouts_detected, 0),
-    message: "Scraping pipeline completed successfully",
-  });
+  try {
+    const { runScrapingPipeline } = await import("@/lib/scrapers/pipeline");
+    const result = await runScrapingPipeline();
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("[Scrape API] Pipeline failed:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : "Pipeline failed",
+      },
+      { status: 500 }
+    );
+  }
 }
 
 // Health check for the scraping service

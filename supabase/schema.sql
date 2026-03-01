@@ -114,6 +114,10 @@ CREATE TABLE tg_alerts_log (
   total_users_notified INTEGER DEFAULT 0
 );
 
+-- Unique constraints for upsert deduplication
+ALTER TABLE scraped_content ADD CONSTRAINT scraped_content_post_url_unique UNIQUE (post_url);
+ALTER TABLE creators ADD CONSTRAINT creators_name_unique UNIQUE (name);
+
 -- Indexes for common queries
 CREATE INDEX idx_scraped_content_creator ON scraped_content(creator_id);
 CREATE INDEX idx_scraped_content_platform ON scraped_content(platform);

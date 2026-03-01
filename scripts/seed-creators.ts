@@ -1,6 +1,18 @@
 // Seed script for the 50 creator list
 // Run with: npx tsx scripts/seed-creators.ts
-// Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars
+// Requires NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars
+
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 const creators = [
   { name: "Alex Hormozi", tiktok_handle: "hormozi", instagram_handle: "hormozi", youtube_channel_id: "UCPr7L-CmPMHJIGEj_kyGnCw", niche_tags: ["business", "personal_brand", "marketing"] },
@@ -53,8 +65,39 @@ const creators = [
   { name: "Jay Shetty", tiktok_handle: "jayshetty", instagram_handle: "jayshetty", youtube_channel_id: "UCbV60AGIHBmyFbKdgMal0Cg", niche_tags: ["motivation", "personal_brand", "content"] },
   { name: "Ryan Pineda", tiktok_handle: "ryanpineda", instagram_handle: "ryanpineda", youtube_channel_id: "UC7CNVPh-H4bO0I4aK4kj4QQ", niche_tags: ["real_estate", "business", "personal_brand"] },
   { name: "Kris Krohn", tiktok_handle: "kriskrohn", instagram_handle: "kriskrohn", youtube_channel_id: "UCE87VN09uT2lzJJJ_Y2QLYA", niche_tags: ["real_estate", "business", "personal_brand"] },
+  { name: "Matt Gray", tiktok_handle: "realmattgray", instagram_handle: "realmattgray", youtube_channel_id: "UChYHKRass0kZvBkVKQuZElQ", niche_tags: ["business", "personal_brand", "solopreneur"] },
+  { name: "Alex Garcia", tiktok_handle: null, instagram_handle: "alexgarcia", youtube_channel_id: "UCnGOF8GmTnJu-7VsjX1IOHQ", niche_tags: ["marketing", "business", "personal_brand"] },
+  { name: "Oren Meets World", tiktok_handle: "orenmeetsworld", instagram_handle: "orenmeetsworld", youtube_channel_id: "UC_tSQ6UQy2pROm-I0J7UBoA", niche_tags: ["personal_brand", "content", "business"] },
+  { name: "Tom Noske", tiktok_handle: "tomnoske", instagram_handle: "tomnoske", youtube_channel_id: "UC0tNbnCRYniecs_n3d7-8dA", niche_tags: ["personal_brand", "content", "business"] },
+  { name: "Caleb Ralston", tiktok_handle: "calebralston", instagram_handle: "calebralston", youtube_channel_id: "UCbc7A6bNtpyybJbGvIi0PNQ", niche_tags: ["personal_brand", "content", "business"] },
+  { name: "The Futur", tiktok_handle: "thefutur", instagram_handle: "thefutur", youtube_channel_id: "UC-b3c7kxa5vU-bnmaROgvog", niche_tags: ["design", "business", "marketing"] },
+  { name: "Jun Yuh", tiktok_handle: "jun_yuh", instagram_handle: "jun_yuh", youtube_channel_id: "UClDcKhHgT3x88I0q7BOT0ow", niche_tags: ["personal_brand", "content", "business"] },
+  { name: "Dan Koe Talks", tiktok_handle: null, instagram_handle: null, youtube_channel_id: "UCWXYDYv5STLk-zoxMP2I1Lw", niche_tags: ["personal_brand", "business", "content"] },
+  { name: "Kallaway", tiktok_handle: "kallawaymarketing", instagram_handle: "kallawaymarketing", youtube_channel_id: "UCg5WjzrwxRRUUDf7WHKPzsA", niche_tags: ["marketing", "personal_brand", "content"] },
+  { name: "Neil Patel", tiktok_handle: "neilpatel", instagram_handle: "neilpatel", youtube_channel_id: "UCl-Zrl0QhF66lu1aGXaTbfw", niche_tags: ["marketing", "business", "seo"] },
+  { name: "Sweat Equity Podcast", tiktok_handle: null, instagram_handle: "sweatequitypod", youtube_channel_id: "UC3c6jXLSMhDH6XlcoKXGryA", niche_tags: ["business", "personal_brand", "content"] },
 ];
 
-console.log(`Prepared ${creators.length} creators for seeding.`);
-console.log("To seed, set up Supabase and run the SQL insert or use the Supabase client.");
-console.log(JSON.stringify(creators, null, 2));
+async function seed() {
+  console.log(`Seeding ${creators.length} creators...`);
+
+  const { error } = await supabase.from("creators").upsert(
+    creators.map((c) => ({
+      name: c.name,
+      tiktok_handle: c.tiktok_handle,
+      instagram_handle: c.instagram_handle,
+      youtube_channel_id: c.youtube_channel_id,
+      niche_tags: c.niche_tags,
+    })),
+    { onConflict: "name" }
+  );
+
+  if (error) {
+    console.error("Seed error:", error.message);
+    process.exit(1);
+  }
+
+  console.log(`Successfully seeded ${creators.length} creators.`);
+}
+
+seed();

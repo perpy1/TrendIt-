@@ -1,16 +1,12 @@
 "use client";
 
 import { AuthProvider } from "@/lib/auth-context";
-import { VistaTaskbar } from "@/components/vista-taskbar";
-import { VistaDesktop } from "@/components/vista-desktop";
+import { CyberLayout } from "@/components/cyber-layout";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
-      <VistaDesktop>
-        {children}
-      </VistaDesktop>
-      <VistaTaskbar />
+      <CyberLayout>{children}</CyberLayout>
     </AuthProvider>
   );
 }
